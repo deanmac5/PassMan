@@ -37,7 +37,23 @@ def save():
             web_input.focus()
 
 
+def search():
+    print(f"Looking for {web_input.get()}")
+    try:
+        with open("data.json", "r") as data_file:
+            data = json.load(data_file)
+            result = data[web_input.get()]
+            message = f"Email is {result['email']}\nPassword is {result['password']}"
+    except FileNotFoundError:
+        messagebox.showinfo(title="Error", message="Data file not found")
+    except KeyError:
+        message = "No details found for this website"
+    finally:
+        messagebox.showinfo(title=f"{web_input.get()}", message=message)
+
+
 # ---------------------------- UI SETUP ------------------------------- #
+
 
 window = Tk()
 window.title("Password Manager")
@@ -50,25 +66,28 @@ canvas.grid(row=0, column=1)
 
 web_label = Label(text="Website:")
 web_label.grid(row=1, column=0)
-web_input = Entry(width=40)
-web_input.grid(row=1, column=1, columnspan=2)
+web_input = Entry(width=30)
+web_input.grid(row=1, column=1)
 web_input.focus()
+
+search_button = Button(text="Search", width=15, command=search)
+search_button.grid(row=1, column=2)
 
 email_label = Label(text="Email/Username:")
 email_label.grid(row=2, column=0)
-email_input = Entry(width=40)
+email_input = Entry(width=49)
 email_input.grid(row=2, column=1, columnspan=2)
 email_input.insert(0, "example@test.com")
 
 pwd_label = Label(text="Password:")
 pwd_label.grid(row=3, column=0)
-pwd_input = Entry(width=21)
+pwd_input = Entry(width=30)
 pwd_input.grid(row=3, column=1)
 
-gen_button = Button(text="Generate Password")
+gen_button = Button(text="Generate Password", width=15)
 gen_button.grid(row=3, column=2)
 
-add_button = Button(text="Add", width=38, command=save)
+add_button = Button(text="Add", width=47, command=save)
 add_button.grid(row=4, column=1, columnspan=2)
 
 window.mainloop()
